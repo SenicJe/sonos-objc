@@ -36,19 +36,14 @@ typedef void (^findDevicesBlock)(NSArray *ipAddresses);
                     if (hResponse.statusCode == 200){
                         NSDictionary *responseDictionary = [XMLReader dictionaryForXMLData:data error:&error];
                         NSArray *inputDictionaryArray = responseDictionary[@"ZPSupportInfo"][@"ZonePlayers"][@"ZonePlayer"];
-                        
-                        for (NSDictionary *dictionary in inputDictionaryArray){
-                            NSString *name = dictionary[@"text"];
-                            NSString *coordinator = dictionary[@"coordinator"];
-                            NSString *uuid = dictionary[@"uuid"];
-                            NSString *group = dictionary[@"group"];
-                            NSString *ip = [[dictionary[@"location"] stringByReplacingOccurrencesOfString:@"http://" withString:@""] stringByReplacingOccurrencesOfString:@"/xml/device_description.xml" withString:@""];
-                            NSArray *location = [ip componentsSeparatedByString:@":"];
-                            SonosController *controllerObject = [[SonosController alloc] initWithIP:[location objectAtIndex:0] port:[[location objectAtIndex:1] intValue]];
-                            
-                            [devices addObject:@{@"ip": [location objectAtIndex:0], @"port" : [location objectAtIndex:1], @"name": name, @"coordinator": [NSNumber numberWithBool:[coordinator isEqualToString:@"true"] ? YES : NO], @"uuid": uuid, @"group": group, @"controller": controllerObject}];
-                            
+                        if([inputDictionaryArray isKindOfClass:[NSArray class]]){
+                            for (NSDictionary *dictionary in inputDictionaryArray){
+                                [self addControllerWithInfo:dictionary container:devices];
+                            }
+                        }else{
+                            [self addControllerWithInfo:(NSDictionary *)inputDictionaryArray container:devices];
                         }
+
                         NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
                         [devices sortUsingDescriptors:[NSArray arrayWithObjects:sort, nil]];
                         completion(devices, error);
@@ -61,7 +56,19 @@ typedef void (^findDevicesBlock)(NSArray *ipAddresses);
         }];
     });
 }
++(void)addControllerWithInfo:(NSDictionary *)dictionary container:(NSMutableArray*)devices{
 
+    NSString *name = dictionary[@"text"];
+    NSString *coordinator = dictionary[@"coordinator"];
+    NSString *uuid = dictionary[@"uuid"];
+    NSString *group = dictionary[@"group"];
+    NSString *ip = [[dictionary[@"location"] stringByReplacingOccurrencesOfString:@"http://" withString:@""] stringByReplacingOccurrencesOfString:@"/xml/device_description.xml" withString:@""];
+    NSArray *location = [ip componentsSeparatedByString:@":"];
+    SonosController *controllerObject = [[SonosController alloc] initWithIP:[location objectAtIndex:0] port:[[location objectAtIndex:1] intValue]];
+
+    [devices addObject:@{@"ip": [location objectAtIndex:0], @"port" : [location objectAtIndex:1], @"name": name, @"coordinator": [NSNumber numberWithBool:[coordinator isEqualToString:@"true"] ? YES : NO], @"uuid": uuid, @"group": group, @"controller": controllerObject}];
+    
+}
 - (void)findDevices:(findDevicesBlock)block {
     self.completionBlock = block;
     self.ipAddressesArray = [NSArray array];
