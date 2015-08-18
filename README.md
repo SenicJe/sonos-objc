@@ -1,9 +1,8 @@
 sonos-objc
 ==========
-# This repository is forked for using Nuimo project.
-# If you want to use sonos-objc, please use [sonos-objc](https://github.com/n1mda/sonos-objc) instead.
-
-----
+### This repository is forked for using Nuimo project.
+### If you want to use sonos-objc, please use [sonos-objc](https://github.com/n1mda/sonos-objc) instead.
+---  
 An Objective-C API for controlling Sonos Devices
 
 The aim of this library is to create a simple to use, yet useful API to control Sonos Devices via SOAP. It depends on AFNetworking (iOS and OS X), CocoaAsyncSocket (iOS and OS X) and XMLReader.h/m (iOS and OS X)
