@@ -14,11 +14,11 @@
 // Arrays containing all Sonos Devices on network
 @property (strong, nonatomic) NSMutableArray *coordinators;
 @property (strong, nonatomic) NSMutableArray *slaves;
-
-+ (id)sharedInstance;
-
-- (void)refresh;
 // Returns a copy of all devices, coordinators + slaves
-- (NSArray *)allDevices;
+@property (readonly) NSArray *allDevices;
+
++ (instancetype)sharedInstance;
+
+- (void)refresh:(void(^)(SonosManager *))completionHandler;
 
 @end

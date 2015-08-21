@@ -12,7 +12,7 @@
 
 @implementation SonosManager
 
-+ (SonosManager *)sharedInstance {
++ (instancetype)sharedInstance {
     static SonosManager *sharedInstanceInstance = nil;
     static dispatch_once_t p;
     dispatch_once(&p, ^{
@@ -32,7 +32,7 @@
     return self;
 }
 
-- (void)refresh {
+- (void)refresh:(void (^)(SonosManager *))completionHandler {
     [SonosDiscover discoverControllers:^(NSArray *devices, NSError *error){
         
         [self willChangeValueForKey:@"allDevices"];
@@ -64,6 +64,11 @@
         }
         
         [self didChangeValueForKey:@"allDevices"];
+        
+        if (completionHandler) {
+            completionHandler(self);
+        }
+        
     }];
 }
 
