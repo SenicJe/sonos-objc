@@ -17,6 +17,7 @@
 
 + (id)sharedInstance;
 
+- (void)refresh;
 // Returns a copy of all devices, coordinators + slaves
 - (NSArray *)allDevices;
 
