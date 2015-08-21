@@ -55,20 +55,7 @@
                     }
                 }
             }
-            
-            // Find current device (this implementation may change in the future)
-            if([[self allDevices] count] > 0) {
-                [self willChangeValueForKey:@"currentDevice"];
-                self.currentDevice = [self.coordinators objectAtIndex:0];
-                for(SonosController *controller in self.coordinators) {
-                    // If a coordinator is playing, make it the current device
-                    [controller playbackStatus:^(BOOL playing, NSDictionary *response, NSError *error){
-                        if(playing) self.currentDevice = controller;
-                    }];
-                }
-                [self didChangeValueForKey:@"currentDevice"];
-            }
-            
+                        
             [self didChangeValueForKey:@"allDevices"];
         }];
     }

@@ -15,9 +15,6 @@
 @property (strong, nonatomic) NSMutableArray *coordinators;
 @property (strong, nonatomic) NSMutableArray *slaves;
 
-// The "current" device, ie. the device that acts if we select "play" now
-@property (strong, readwrite, nonatomic) SonosController *currentDevice;
-
 + (id)sharedInstance;
 
 // Returns a copy of all devices, coordinators + slaves
